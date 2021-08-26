@@ -35,7 +35,7 @@ class AdMobSSV
      */
     public function validate()
     {
-        if (!$this->request->has('key_id') || !$this->request->has('signature'))
+        if (!$this->request->query->has('key_id') || !$this->request->query->has('signature'))
             throw new \InvalidArgumentException();
 
         $ecdsaPublicKey = PublicKey::createEcdsaPublicKeyFromRequest($this->request);
