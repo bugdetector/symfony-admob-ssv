@@ -16,7 +16,7 @@ class Signature
      *
      * @return \EllipticCurve\Signature
      */
-    public static function createEcdsaSigntatureFromRequest(Request $request)
+    public static function createEcdsaSignatureFromRequest(Request $request)
     {
         return self::create($request->query->get('signature'));
     }
