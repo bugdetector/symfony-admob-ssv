@@ -1,27 +1,25 @@
 <?php
 
-namespace Casperlaitw\LaravelAdmobSsv;
+namespace Junker\AdMobSSV;
 
 use Eastwest\Json\Json;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\Request;
 use InvalidArgumentException;
 
 /**
  * Class PublicKey
  *
- * @package Casperlaitw\LaravelAdmobSsv
+ * @package Junker\AdMobSSV
  */
 class PublicKey
 {
     /**
      * @var string
      */
-    private $publicKeyUrl = 'https://www.gstatic.com/admob/reward/verifier-keys.json';
+    const PUBLIC_KEY_URL = 'https://www.gstatic.com/admob/reward/verifier-keys.json';
     /**
      * @var
      */
@@ -68,26 +66,26 @@ class PublicKey
     public function fetchPublicKeys()
     {
         $client = new Client($this->buildOptions());
-        $response = $client->request('GET', $this->publicKeyUrl);
+        $response = $client->request('GET', self::PUBLIC_KEY_URL);
 
         return $this->keyMap = Json::decode($response->getBody()->getContents(), true);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Symfony\Component\HttpFoundation\Request $request
      *
-     * @return \EllipticCurve\PublicKey
+     * @return \Junker\AdMobSSV\PublicKey
      * @throws \Exception
      */
     public static function createPublicKeyFromRequest(Request $request)
     {
-        return self::createPublicKey($request->input('key_id'));
+        return self::createPublicKey($request->query->get('key_id'));
     }
 
     /**
      * @param $keyId
      *
-     * @return \EllipticCurve\PublicKey
+     * @return \Junker\AdMobSSV\PublicKey
      * @throws \Exception
      */
     public static function createPublicKey($keyId)
@@ -97,7 +95,7 @@ class PublicKey
     }
 
     /**
-     * @return \EllipticCurve\PublicKey
+     * @return \Junker\AdMobSSV\PublicKey
      * @throws \Exception
      */
     public function getKey()
@@ -106,9 +104,11 @@ class PublicKey
             throw new InvalidArgumentException('Missing key id');
         }
 
-        $collection = new Collection(Arr::get($this->keyMap, 'keys', []));
-        if ($key = $collection->where('keyId', $this->keyId)->first()) {
-            return \EllipticCurve\PublicKey::fromPem(Arr::get($key, 'pem'));
+        $keymaps = $this->keyMap['keys'] ?? [];
+
+        foreach($keymaps as $keymap) {
+            if ($keymap['keyId'] == $this->keyId)
+                return \Junker\AdMobSSV\PublicKey::fromPem($keymap['pem']);
         }
 
         throw new Exception('Missing public key');
@@ -130,9 +130,10 @@ class PublicKey
     protected function buildCacheMiddlewareStack()
     {
         if (static::$cacheThroughCallback) {
-            return tap(HandlerStack::create(), function (HandlerStack $stack) {
-                $stack->push(call_user_func(static::$cacheThroughCallback), 'cache');
-            });
+            $stack = HandlerStack::create();
+            $stack->push(call_user_func(static::$cacheThroughCallback), 'cache');
+
+            return $stack;
         }
 
         return null;

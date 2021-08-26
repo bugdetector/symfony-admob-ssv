@@ -1,13 +1,10 @@
 <?php
 
-namespace Casperlaitw\LaravelAdmobSsv;
+namespace Junker\AdMobSSV;
 
 use EllipticCurve\Ecdsa;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Kevinrob\GuzzleCache\CacheMiddleware;
-use Kevinrob\GuzzleCache\Storage\LaravelCacheStorage;
-use Kevinrob\GuzzleCache\Strategy\GreedyCacheStrategy;
 
 /**
  * Class AdMob
@@ -17,14 +14,14 @@ use Kevinrob\GuzzleCache\Strategy\GreedyCacheStrategy;
 class AdMob
 {
     /**
-     * @var \Illuminate\Http\Request
+     * @var \Symfony\Component\HttpFoundation\Request
      */
     private $request;
 
     /**
      * AdMob constructor.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function __construct(Request $request)
     {
@@ -38,19 +35,19 @@ class AdMob
      */
     public function validate()
     {
-        $this->request->validate([
-            'key_id' => 'required',
-            'signature' => 'required',
-        ]);
+        if (!$this->request->has('key_id') || !$this->request->has('signature'))
+            throw new \InvalidArgumentException();
 
         $publicKey = PublicKey::createPublicKeyFromRequest($this->request);
         $signature = Signature::createFromRequest($this->request);
 
-        $message = collect($this->request->except(['key_id', 'signature']))
-            ->map(function ($value, $key) {
-                return "{$key}={$value}";
-            })
-            ->implode('&');
+
+        $message = '';
+
+        foreach($request->query->all() as $key => $value) {
+            if ($key != 'key_id' && $key != 'signature')
+                $message .= ($message = '' ?: '&') . "{$key}={$value}";
+        }
 
         return Ecdsa::verify($message, $signature, $publicKey);
     }
@@ -67,15 +64,8 @@ class AdMob
     /**
      * Using Laravel default cache
      */
-    protected function configureCache()
+    protected function configureCache($callback)
     {
-        PublicKey::cacheThrough(function () {
-            return new CacheMiddleware(
-                new GreedyCacheStrategy(
-                    new LaravelCacheStorage(Cache::store('redis')),
-                    43200
-                )
-            );
-        });
+        PublicKey::cacheThrough($callback);
     }
 }
