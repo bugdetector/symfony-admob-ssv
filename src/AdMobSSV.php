@@ -43,7 +43,7 @@ class AdMobSSV
 
         $message = '';
 
-        foreach($request->query->all() as $key => $value) {
+        foreach($this->request->query->all() as $key => $value) {
             if ($key != 'key_id' && $key != 'signature')
                 $message .= ($message = '' ?: '&') . "{$key}={$value}";
         }
