@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 
 /**
- * Class AdMob
+ * Class AdMobSSV
  *
  * @package Casperlaitw\LaravelAdmobSsv
  */
-class AdMob
+class AdMobSSV
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Request
