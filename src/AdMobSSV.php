@@ -45,7 +45,7 @@ class AdMobSSV
 
         foreach($this->request->query->all() as $key => $value) {
             if ($key != 'key_id' && $key != 'signature')
-                $message .= ($message = '' ?: '&') . "{$key}={$value}";
+                $message .= ($message == '' ? '' : '&') . "{$key}={$value}";
         }
 
         return Ecdsa::verify($message, $ecdsaSignature, $ecdsaPublicKey);
