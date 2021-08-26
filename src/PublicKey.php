@@ -79,7 +79,7 @@ class PublicKey
      */
     public static function createEcdsaPublicKeyFromRequest(Request $request)
     {
-        return self::createPublicKey($request->query->get('key_id'));
+        return self::createEcdsaPublicKey($request->query->get('key_id'));
     }
 
     /**
