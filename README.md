@@ -22,3 +22,30 @@ public function callback(Request $request) {
     }
 }
 ```
+
+### example with public key cache
+```php
+use Junker\AdMobSSV\AdMobSSV;
+use Symfony\Component\HttpFoundation\Request;
+use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
+use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
+use Doctrine\Common\Cache\FilesystemCache;
+
+public function callback(Request $request) {
+    $ssv = new AdMobSSV($request);
+
+    $ssv->setCacheStrategy(
+        new PrivateCacheStrategy(
+            new DoctrineCacheStorage(
+                new FilesystemCache('/tmp/')
+            )
+        )
+    );
+
+    if ($ssv->validate()) {
+        // success
+    } else {
+        // failed
+    }
+}
+```

@@ -7,6 +7,8 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Symfony\Component\HttpFoundation\Request;
+use Kevinrob\GuzzleCache\CacheMiddleware;
+use Kevinrob\GuzzleCache\Strategy\CacheStrategyInterface;
 use InvalidArgumentException;
 
 /**

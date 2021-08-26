@@ -63,7 +63,7 @@ class AdMobSSV
     /**
      * Set cache Strategy
      */
-    protected function setCacheStrategy(CacheStrategyInterface $strategy)
+    public function setCacheStrategy(CacheStrategyInterface $strategy)
     {
         PublicKey::setCacheStrategy($strategy);
     }
