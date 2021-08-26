@@ -3,7 +3,7 @@
 namespace Junker\AdMobSSV;
 
 use EllipticCurve\Ecdsa;
-use Illuminate\Http\Request;
+use \Symfony\Component\HttpFoundation\Request;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\Strategy\CacheStrategyInterface;
 
