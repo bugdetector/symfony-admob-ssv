@@ -5,6 +5,7 @@ namespace Junker\AdMobSSV;
 use EllipticCurve\Ecdsa;
 use Illuminate\Http\Request;
 use Kevinrob\GuzzleCache\CacheMiddleware;
+use Kevinrob\GuzzleCache\Strategy\CacheStrategyInterface;
 
 /**
  * Class AdMobSSV
@@ -26,7 +27,6 @@ class AdMobSSV
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->configureCache();
     }
 
     /**
@@ -38,9 +38,8 @@ class AdMobSSV
         if (!$this->request->has('key_id') || !$this->request->has('signature'))
             throw new \InvalidArgumentException();
 
-        $publicKey = PublicKey::createPublicKeyFromRequest($this->request);
-        $signature = Signature::createFromRequest($this->request);
-
+        $ecdsaPublicKey = PublicKey::createEcdsaPublicKeyFromRequest($this->request);
+        $ecdsaSignature = Signature::createEcdsaSignatureFromRequest($this->request);
 
         $message = '';
 
@@ -49,7 +48,7 @@ class AdMobSSV
                 $message .= ($message = '' ?: '&') . "{$key}={$value}";
         }
 
-        return Ecdsa::verify($message, $signature, $publicKey);
+        return Ecdsa::verify($message, $ecdsaSignature, $ecdsaPublicKey);
     }
 
     /**
@@ -62,10 +61,10 @@ class AdMobSSV
     }
 
     /**
-     * Using Laravel default cache
+     * Set cache Strategy
      */
-    protected function configureCache($callback)
+    protected function setCacheStrategy(CacheStrategyInterface $strategy)
     {
-        PublicKey::cacheThrough($callback);
+        PublicKey::setCacheStrategy($strategy);
     }
 }

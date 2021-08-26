@@ -14,9 +14,9 @@ class Signature
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return \Junker\AdMobSSV\Signature
+     * @return \EllipticCurve\Signature
      */
-    public static function createFromRequest(Request $request)
+    public static function createEcdsaSigntatureFromRequest(Request $request)
     {
         return self::create($request->query->get('signature'));
     }
@@ -24,10 +24,10 @@ class Signature
     /**
      * @param $signature
      *
-     * @return \Junker\AdMobSSV\Signature
+     * @return \EllipticCurve\AdMobSSV\Signature
      */
-    public static function create($signature)
+    public static function createEcdsaSignature(string $signature)
     {
-        return \Junker\AdMobSSV\Signature::fromBase64(str_replace(['-', '_'], ['+', '/'], $signature));
+        return \EllipticCurve\Signature::fromBase64(str_replace(['-', '_'], ['+', '/'], $signature));
     }
 }

@@ -33,7 +33,7 @@ class PublicKey
     /**
      * @var
      */
-    public static $cacheThroughCallback;
+    public static $cacheStrategy;
 
     /**
      * PublicKey constructor.
@@ -77,7 +77,7 @@ class PublicKey
      * @return \Junker\AdMobSSV\PublicKey
      * @throws \Exception
      */
-    public static function createPublicKeyFromRequest(Request $request)
+    public static function createEcdsaPublicKeyFromRequest(Request $request)
     {
         return self::createPublicKey($request->query->get('key_id'));
     }
@@ -85,17 +85,17 @@ class PublicKey
     /**
      * @param $keyId
      *
-     * @return \Junker\AdMobSSV\PublicKey
+     * @return \EllipticCurve\PublicKey
      * @throws \Exception
      */
-    public static function createPublicKey($keyId)
+    public static function createEcdsaPublicKey($keyId)
     {
         $key = new self($keyId);
         return $key->getKey();
     }
 
     /**
-     * @return \Junker\AdMobSSV\PublicKey
+     * @return \EllipticCurve\PublicKey
      * @throws \Exception
      */
     public function getKey()
@@ -108,7 +108,7 @@ class PublicKey
 
         foreach($keymaps as $keymap) {
             if ($keymap['keyId'] == $this->keyId)
-                return \Junker\AdMobSSV\PublicKey::fromPem($keymap['pem']);
+                return \EllipticCurve\PublicKey::fromPem($keymap['pem']);
         }
 
         throw new Exception('Missing public key');
@@ -119,9 +119,9 @@ class PublicKey
      *
      * @param callable $callback
      */
-    public static function cacheThrough(callable $callback)
+    public static function setCacheStrategy(CacheStrategyInterface $strategy)
     {
-        static::$cacheThroughCallback = $callback;
+        static::$cacheStrategy = $strategy;
     }
 
     /**
@@ -129,9 +129,9 @@ class PublicKey
      */
     protected function buildCacheMiddlewareStack()
     {
-        if (static::$cacheThroughCallback) {
+        if (static::$cacheStrategy) {
             $stack = HandlerStack::create();
-            $stack->push(call_user_func(static::$cacheThroughCallback), 'cache');
+            $stack->push(new CacheMiddleware(static::$cacheStrategy), 'cache');
 
             return $stack;
         }
