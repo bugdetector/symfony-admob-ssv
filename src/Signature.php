@@ -18,7 +18,7 @@ class Signature
      */
     public static function createEcdsaSignatureFromRequest(Request $request)
     {
-        return self::create($request->query->get('signature'));
+        return self::createEcdsaSignature($request->query->get('signature'));
     }
 
     /**
