@@ -1,5 +1,5 @@
 {
-    "name": "junker/symfony-admob-ssv",
+    "name": "bugdetector/symfony-admob-ssv",
     "description": "Google Admob server-side verification php library",
     "type": "library",
     "license": "MIT",
@@ -11,7 +11,7 @@
         "symfony",
         "ad"
     ],
-    "homepage": "https://github.com/Junker/symfony-admob-ssv",
+    "homepage": "https://github.com/bugdetector/symfony-admob-ssv",
     "authors": [
         {
             "name": "Casper Lai",
