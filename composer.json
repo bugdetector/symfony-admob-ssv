@@ -20,15 +20,19 @@
         {
             "name": "Dmitry Kosenkov",
             "email": "dk-junker@ya.ru"
+        },
+        {
+            "name": "Murat Baki Yücel",
+            "email": "bakiyucel38@gmail.com"
         }
     ],
     "require": {
-        "php": ">=7.0",
-        "guzzlehttp/guzzle": "^6.0|^7.0",
+        "php": ">=8.2",
+        "guzzlehttp/guzzle": "^7.0",
         "eastwest/json": "^3.0",
-        "symfony/http-foundation": "^2.0 || ^3.0 || ^4.0 || ^5.0",
-        "starkbank/ecdsa": "^0.0.4",
-        "kevinrob/guzzle-cache-middleware": "^3.3"
+        "symfony/http-foundation": "^7.0",
+        "starkbank/ecdsa": "^2.1",
+        "kevinrob/guzzle-cache-middleware": "^6.0"
     },
     "autoload": {
         "psr-4": {
