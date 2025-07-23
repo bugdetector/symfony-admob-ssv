@@ -1,6 +1,6 @@
 <?php
 
-namespace Junker\AdMobSSV;
+namespace Bugdetector\AdMobSSV;
 
 use EllipticCurve\Ecdsa;
 use \Symfony\Component\HttpFoundation\Request;

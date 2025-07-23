@@ -14,14 +14,6 @@
     "homepage": "https://github.com/bugdetector/symfony-admob-ssv",
     "authors": [
         {
-            "name": "Casper Lai",
-            "email": "casper.lai@sleepingdesign.com"
-        },
-        {
-            "name": "Dmitry Kosenkov",
-            "email": "dk-junker@ya.ru"
-        },
-        {
             "name": "Murat Baki Yücel",
             "email": "bakiyucel38@gmail.com"
         }
@@ -36,7 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Junker\\AdMobSSV\\": "src"
+            "Bugdetector\\AdMobSSV\\": "src"
         }
     }
 }
