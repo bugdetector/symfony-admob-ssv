@@ -3,14 +3,14 @@ The library help you to verify Admob callback in server.
 
 ## Install
 ```
-composer require junker/symfony-admob-ssv
+composer require bugdetector/symfony-admob-ssv
 ```
 
 
 ## How to use
 
 ```php
-use Junker\AdMobSSV\AdMobSSV;
+use Bugdetector\AdMobSSV\AdMobSSV;
 use Symfony\Component\HttpFoundation\Request;
 
 public function callback(Request $request) {
@@ -25,7 +25,7 @@ public function callback(Request $request) {
 
 ### example with public key cache
 ```php
-use Junker\AdMobSSV\AdMobSSV;
+use Bugdetector\AdMobSSV\AdMobSSV;
 use Symfony\Component\HttpFoundation\Request;
 use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
 use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
